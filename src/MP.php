@@ -22,21 +22,26 @@ class MP {
     private $ll_access_token;
     private $access_data;
     private $sandbox = FALSE;
+    private $integrator_id;
 
-    function __construct() {
+    function __construct($access_token = null, $client_id = null, $client_secret = null, $integrator_id = null) {
         $i = func_num_args(); 
 
-        if ($i > 2 || $i < 1) {
+        if (!$access_token && (!$client_id || !$client_secret )) {
             throw new MercadoPagoException("Invalid arguments. Use CLIENT_ID and CLIENT SECRET, or ACCESS_TOKEN");
         }
 
-        if ($i == 1) {
-            $this->ll_access_token = func_get_arg(0);
+        if ($access_token) {
+            $this->ll_access_token = $access_token;
         }
 
-        if ($i == 2) {
-            $this->client_id = func_get_arg(0);
-            $this->client_secret = func_get_arg(1);
+        if ($client_id && $client_secret ) {
+            $this->client_id = $client_id;
+            $this->client_secret = $client_secret;
+        }
+
+        if ($integrator_id) {
+            $this->integrator_id = $integrator_id;
         }
     }
 
@@ -90,7 +95,8 @@ class MP {
         $request = array(
             "uri" => $uri_prefix."/collections/notifications/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             )
         );
 
@@ -110,7 +116,8 @@ class MP {
         $request = array(
             "uri" => "/authorized_payments/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             )
         );
 
@@ -127,7 +134,8 @@ class MP {
         $request = array(
             "uri" => "/collections/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             ),
             "data" => array(
                 "status" => "refunded"
@@ -147,7 +155,8 @@ class MP {
         $request = array(
             "uri" => "/collections/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             ),
             "data" => array(
                 "status" => "cancelled"
@@ -167,7 +176,8 @@ class MP {
         $request = array(
             "uri" => "/preapproval/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             ),
             "data" => array(
                 "status" => "cancelled"
@@ -194,7 +204,8 @@ class MP {
         $request = array(
             "uri" => $uri_prefix."/collections/search",
             "params" => array_merge ($filters, array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             ))
         );
 
@@ -211,7 +222,8 @@ class MP {
         $request = array(
             "uri" => "/checkout/preferences",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             ),
             "data" => $preference
         );
@@ -230,7 +242,8 @@ class MP {
         $request = array(
             "uri" => "/checkout/preferences/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             ),
             "data" => $preference
         );
@@ -248,7 +261,8 @@ class MP {
         $request = array(
             "uri" => "/checkout/preferences/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             )
         );
 
@@ -265,7 +279,8 @@ class MP {
         $request = array(
             "uri" => "/preapproval",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             ),
             "data" => $preapproval_payment
         );
@@ -283,7 +298,8 @@ class MP {
         $request = array(
             "uri" => "/preapproval/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             )
         );
 
@@ -301,7 +317,8 @@ class MP {
         $request = array(
             "uri" => "/preapproval/{$id}",
             "params" => array(
-                "access_token" => $this->get_access_token()
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
             ),
             "data" => $preapproval_payment
         );
@@ -439,6 +456,7 @@ class MPRestClient {
         $json_content = true;
         $form_content = false;
         $default_content_type = true;
+        $integrator_id = false;
 
         if (isset($request["headers"]) && is_array($request["headers"])) {
             foreach ($request["headers"] as $h => $v) {
@@ -454,8 +472,23 @@ class MPRestClient {
                 array_push ($headers, $h.": ".$v);
             }
         }
+
+        // Set parameters and url
+        if (isset ($request["params"]) && is_array($request["params"]) && count($request["params"]) > 0) {
+            $request["uri"] .= (strpos($request["uri"], "?") === false) ? "?" : "&";
+            $request["uri"] .= self::build_query($request["params"]);
+
+            if(isset($request["params"]["integrator_id"]) && $request["params"]["integrator_id"]){
+                $integrator_id = $request["params"]["integrator_id"];
+            }
+        }
+                
         if ($default_content_type) {
             array_push($headers, "content-type: application/json");
+            
+            if($integrator_id ){
+                array_push($headers, "x-integrator-id: ".$integrator_id);
+            }
         }
 
         // Build $connect
@@ -467,12 +500,6 @@ class MPRestClient {
         curl_setopt($connect, CURLOPT_CAINFO, $GLOBALS["LIB_LOCATION"] . "/cacert.pem");
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $request["method"]);
         curl_setopt($connect, CURLOPT_HTTPHEADER, $headers);
-
-        // Set parameters and url
-        if (isset ($request["params"]) && is_array($request["params"]) && count($request["params"]) > 0) {
-            $request["uri"] .= (strpos($request["uri"], "?") === false) ? "?" : "&";
-            $request["uri"] .= self::build_query($request["params"]);
-        }
         curl_setopt($connect, CURLOPT_URL, self::API_BASE_URL . $request["uri"]);
 
         // Set data

@@ -1,3 +1,23 @@
+# FORK DEL POYECTO ORIGINAL DE: santigraviano/laravel-mercadopago
+
+<a href="https://github.com/santigraviano/laravel-mercadopago">santigraviano/laravel-mercadopago</a>
+
+Mejoras 05/2024:
+
+-se corrige el error por certificados caducados
+
+-se agrega la variable de Access Token (MP_ACCESS_TOKEN) para configurar desde el .env
+
+-se agrega la variable de Integrator Id (MP_INTEGRATOR_ID) para configurar desde el .env
+
+
+
+
+
+
+
+# DESCRIPCIÓN ORIGINAL
+
 # Laravel Facade para MercadoPago v0.5.2
 
 * [Instalación](#install)
