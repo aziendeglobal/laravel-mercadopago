@@ -1,4 +1,6 @@
-# FORK DEL POYECTO ORIGINAL DE: santigraviano/laravel-mercadopago
+# FORK DEL POYECTO ORIGINAL DE: 
+
+* santigraviano/laravel-mercadopago
 
 <a href="https://github.com/santigraviano/laravel-mercadopago">santigraviano/laravel-mercadopago</a>
 
@@ -16,20 +18,22 @@ Mejoras 05/2024:
 
 
 
-# DESCRIPCIÓN ORIGINAL
 
-# Laravel Facade para MercadoPago v0.5.2
+
+# DESCRIPCIÓN 
+
+# Laravel Facade para MercadoPago 
 
 * [Instalación](#install)
 * [Configuración](#configuration)
 * [Como utilizar](#how-to)
 
-La compatibilidad con Laravel 5.3 fue probada con exito por [kikemarto](https://github.com/kikemarto)
+* Compatibilidad en revisión !!
 
 <a name="install"></a>
 ### Instalación
 
-`composer require santigraviano/laravel-mercadopago`
+`composer require aziendeglobal/laravel-mercadopago`
 
 Dentro de `config/app.php` agregar los siguientes Provider y Alias
 
@@ -38,7 +42,7 @@ Provider
 ```php
 'providers' => [
   // Otros Providers...
-  SantiGraviano\LaravelMercadoPago\Providers\MercadoPagoServiceProvider::class,
+  AziendeGlobal\LaravelMercadoPago\Providers\MercadoPagoServiceProvider::class,
   /*
    * Application Service Providers...
    */
@@ -50,7 +54,7 @@ Alias
 ```php
 'aliases' => [
   // Otros Aliases
-  'MP' => SantiGraviano\LaravelMercadoPago\Facades\MP::class,
+  'MP' => AziendeGlobal\LaravelMercadoPago\Facades\MP::class,
 ],
 ```
 
@@ -156,6 +160,4 @@ class MercadoPagoController extends Controller
   }
 ```
 
-En el ejemplo se puede ver el uso de la libreria `Carbon`, para especificar la fecha de comienzo de la subscripción y el termino de la misma, siendo de frecuencia mensual.
 
-A la fecha actual, via `Carbon` se le agrega una hora, ya que de otra manera MercadoPago puede dar la fecha como pasada.
