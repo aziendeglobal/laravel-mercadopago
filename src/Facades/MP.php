@@ -1,6 +1,6 @@
 <?php
 
-namespace SantiGraviano\LaravelMercadoPago\Facades;
+namespace AziendeGlobal\LaravelMercadoPago\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
