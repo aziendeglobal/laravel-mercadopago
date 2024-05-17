@@ -15,7 +15,7 @@ $GLOBALS["LIB_LOCATION"] = dirname(__FILE__);
 
 class MP {
 
-    const version = "0.5.2";
+    const version = "1.0.1";
 
     private $client_id;
     private $client_secret;
@@ -304,6 +304,25 @@ class MP {
         );
 
         $preapproval_payment_result = MPRestClient::get($request);
+        return $preapproval_payment_result;
+    }
+
+      /**
+     * Create a preapproval plan payment
+     * @param array $preapproval_plan_payment
+     * @return array(json)
+     */
+    public function create_preapproval_plan_payment($preapproval_plan_payment) {
+        $request = array(
+            "uri" => "/preapproval_plan",
+            "params" => array(
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
+            ),
+            "data" => $preapproval_plan_payment
+        );
+
+        $preapproval_payment_result = MPRestClient::post($request);
         return $preapproval_payment_result;
     }
 
