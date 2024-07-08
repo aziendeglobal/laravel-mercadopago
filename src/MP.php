@@ -387,6 +387,27 @@ class MP
     }
 
 
+    /**
+     * Create test user
+     * @param array $data
+     * @return array(json)
+     */
+    public function create_user_test($data)
+    {
+        $request = array(
+            "uri" => "/users/test",
+            "params" => array(
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
+            ),
+            "data" => $data
+        );
+
+        $user_test_result = MPRestClient::post($request);
+        return $user_test_result;
+    }    
+
+
     /* Generic resource call methods */
 
     /**
