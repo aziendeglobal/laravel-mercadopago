@@ -345,6 +345,26 @@ class MP
     }
 
     /**
+     * Get a preapproval payment
+     * @param string $id
+     * @return array(json)
+     */
+    public function get_preapproval_payments_search($data_query)
+    {
+        $request = array(
+            "uri" => "/preapproval/search",
+            "params" => array(
+                "access_token" => $this->get_access_token(),
+                "integrator_id" => $this->integrator_id,
+            ),
+            "data" => $data_query
+        );
+
+        $preapproval_payment_result = MPRestClient::get($request);
+        return $preapproval_payment_result;
+    }
+
+    /**
      * Create a preapproval plan payment
      * @param array $preapproval_plan_payment
      * @return array(json)
