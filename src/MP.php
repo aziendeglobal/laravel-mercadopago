@@ -349,15 +349,15 @@ class MP
      * @param string $id
      * @return array(json)
      */
-    public function get_preapproval_payments_search($data_query)
+    public function get_preapproval_payments_search($filters)
     {
         $request = array(
             "uri" => "/preapproval/search",
-            "params" => array(
+            "params" => array_merge($filters, array(
                 "access_token" => $this->get_access_token(),
                 "integrator_id" => $this->integrator_id,
-            ),
-            "data" => $data_query
+            )),
+            
         );
 
         $preapproval_payment_result = MPRestClient::get($request);
