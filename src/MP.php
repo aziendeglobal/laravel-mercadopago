@@ -346,7 +346,7 @@ class MP
 
     /**
      * Get a preapproval payment
-     * @param string $id
+     * @param array $filters
      * @return array(json)
      */
     public function get_preapproval_payments_search($filters)
