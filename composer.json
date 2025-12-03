@@ -16,5 +16,15 @@
         "psr-4": {
             "AziendeGlobal\\LaravelMercadoPago\\" : "src/"
         }
+    },
+    "extra": {
+    "laravel": {
+        "providers": [
+            "AziendeGlobal\\LaravelMercadoPago\\Providers\\MercadoPagoServiceProvider"
+        ],
+        "aliases": {
+            "MP": "AziendeGlobal\\LaravelMercadoPago\\Facades\\MP"
+        }
     }
+}
 }

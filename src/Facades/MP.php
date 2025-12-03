@@ -8,6 +8,7 @@ class MP extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'MP';
+        // Este string debe coincidir con lo que pusimos en $this->app->singleton('MP', ...)
+        return 'MP'; 
     }
 }

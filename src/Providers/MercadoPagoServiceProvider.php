@@ -7,27 +7,41 @@ use AziendeGlobal\LaravelMercadoPago\MP;
 
 class MercadoPagoServiceProvider extends ServiceProvider 
 {
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot()
+    {
+        // Publicar el archivo de configuración
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/mercadopago.php' => config_path('mercadopago.php')
+            ], 'mercadopago-config');
+        }
+    }
 
-	protected $mp_access_token;
-	protected $mp_app_id;
-	protected $mp_app_secret;
-	protected $mp_integrator_id;
+    /**
+     * Register any application services.
+     */
+    public function register()
+    {
+        // Fusionar configuración por defecto (buena práctica en paquetes)
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/mercadopago.php', 'mercadopago'
+        );
 
-	public function boot()
-	{
-		
-		$this->publishes([__DIR__.'/../config/mercadopago.php' => config_path('mercadopago.php')]);
+        // Registrar el Singleton
+        // Usamos el string 'MP' para que coincida con el getFacadeAccessor del Facade
+        $this->app->singleton('MP', function($app) {
+            // Leemos la configuración AQUÍ, en el momento que se necesita
+            $config = $app['config']->get('mercadopago');
 
-		$this->mp_access_token     = config('mercadopago.app_access_token');
-		$this->mp_app_id     = config('mercadopago.app_id');
-		$this->mp_app_secret = config('mercadopago.app_secret');
-		$this->mp_integrator_id = config('mercadopago.app_integrator_id');
-	}
-
-	public function register()
-	{
-		$this->app->singleton('MP', function(){
-			return new MP($this->mp_access_token, $this->mp_app_id, $this->mp_app_secret, $this->mp_integrator_id);
-		});
-	}
+            return new MP(
+                $config['app_access_token'] ?? null,
+                $config['app_id'] ?? null,
+                $config['app_secret'] ?? null,
+                $config['app_integrator_id'] ?? null
+            );
+        });
+    }
 }
