@@ -1,7 +1,11 @@
 {
     "name": "aziendeglobal/laravel-mercadopago",
     "description": "Mercado Pago SDK for Laravel by Aziende Global",
-    "keywords": ["laravel", "mercadopago", "sdk"],
+    "keywords": [
+        "laravel",
+        "mercadopago",
+        "sdk"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -14,17 +18,17 @@
     },
     "autoload": {
         "psr-4": {
-            "AziendeGlobal\\LaravelMercadoPago\\" : "src/"
+            "AziendeGlobal\\LaravelMercadoPago\\": "src/"
         }
     },
     "extra": {
-    "laravel": {
-        "providers": [
-            "AziendeGlobal\\LaravelMercadoPago\\Providers\\MercadoPagoServiceProvider"
-        ],
-        "aliases": {
-            "MP": "AziendeGlobal\\LaravelMercadoPago\\Facades\\MP"
+        "laravel": {
+            "providers": [
+                "AziendeGlobal\\LaravelMercadoPago\\Providers\\MercadoPagoServiceProvider"
+            ],
+            "aliases": {
+                "MP": "AziendeGlobal\\LaravelMercadoPago\\Facades\\MP"
+            }
         }
     }
-}
 }
